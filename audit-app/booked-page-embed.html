@@ -1,0 +1,64 @@
+<style>html,body{background:#070C10!important;overflow-x:hidden}</style>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+<style>
+.pb{--bg:#070C10;--alt:#0E171C;--card:#122027;--line:#1E2E36;--tx:#F3F6F5;--mut:#9AA8B0;--em:#10B981;
+  width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;
+  background:var(--bg);color:var(--tx);font-family:'DM Sans',Arial,sans-serif;font-size:17px;line-height:1.6}
+.pb *{box-sizing:border-box}
+.pb section{width:100%;padding:72px 16px}
+.pb section.alt{background:var(--alt)}
+.pb .in{max-width:800px;margin:0 auto}
+.pb h1,.pb h2{font-family:'Plus Jakarta Sans',Arial,sans-serif;font-weight:800;letter-spacing:-.5px;line-height:1.15;margin:0 0 16px}
+.pb h1{font-size:44px}
+.pb h2{font-size:30px}
+.pb p{margin:0 0 16px;color:var(--mut)}
+.pb .hero{text-align:center;padding:96px 16px 88px}
+.pb .check{width:56px;height:56px;border-radius:50%;background:rgba(16,185,129,.12);border:1px solid var(--em);display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
+.pb .btn{display:inline-block;background:var(--em);color:#070C10!important;font-family:'Plus Jakarta Sans',Arial,sans-serif;font-weight:800;font-size:18px;padding:18px 36px;border-radius:999px;text-decoration:none;margin-top:12px}
+.pb .btn:hover{filter:brightness(1.08)}
+.pb .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+.pb .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px}
+.pb .num{font-family:'Plus Jakarta Sans',Arial,sans-serif;font-weight:800;color:var(--em);font-size:22px;margin-bottom:8px}
+.pb .card p{margin:0;color:var(--tx);font-size:16px}
+.pb blockquote{margin:28px 0 0;padding:20px 24px;border-left:4px solid var(--em);background:var(--card);border-radius:0 12px 12px 0;font-style:italic;color:var(--tx)}
+.pb blockquote span{display:block;font-style:normal;color:var(--mut);font-size:15px;margin-top:8px}
+.pb strong{color:var(--tx)}
+.pb footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;font-size:14px;color:var(--mut)}
+.pb footer a{color:var(--mut)}
+@media(max-width:900px){.pb .cards{grid-template-columns:1fr}}
+@media(max-width:600px){.pb h1{font-size:32px}.pb h2{font-size:25px}.pb section{padding:56px 16px}.pb .btn{display:block;text-align:center;padding:18px 20px}}
+</style>
+<div class="pb">
+  <section class="hero">
+    <div class="in">
+      <div class="check"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h1>You're booked. Your audit is on its way too.</h1>
+      <p>A calendar invite and a confirmation email are in your inbox now, along with The Founder's Bottleneck Audit. Want your numbers before the call? Open the audit right here.</p>
+      <a class="btn" href="/audit" target="_blank" rel="noopener">Start my audit now →</a>
+    </div>
+  </section>
+  <section class="alt">
+    <div class="in">
+      <h2>Three things to do before we talk</h2>
+      <div class="cards">
+        <div class="card"><div class="num">1</div><p>Accept the calendar invite so the call is on your calendar. Can't find it? Check Promotions or Spam.</p></div>
+        <div class="card"><div class="num">2</div><p>Take the audit if you have 10 minutes. Done it? Bring your Bottleneck Score and Hand-off Hours. Not yet? We'll go through it together on the call.</p></div>
+        <div class="card"><div class="num">3</div><p>Write down the three tasks you'd hand off tomorrow if you could. We'll start there.</p></div>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="in">
+      <h2>30 minutes, no pressure</h2>
+      <p>We look at where your week goes, pick the first systems to hand off, and map your first 30 days. You leave with that plan whether or not you hire. If a Right Hand makes sense, Pareto backs it with three guarantees: <strong>Freedom 40</strong> (40+ hours back in 30 days or next month free), <strong>Matching</strong> (no payment until you're excited about your match) and <strong>Lifetime Replacement</strong>.</p>
+      <blockquote>"It's only day 2 and I'm already feeling such a relief."<span>Daneen Goncalves</span></blockquote>
+    </div>
+  </section>
+  <section class="alt">
+    <div class="in">
+      <h2>Need to change the time?</h2>
+      <p>Use the reschedule link in your confirmation email, or simply reply to that email and a real person will help.</p>
+    </div>
+  </section>
+  <footer>© Pareto Talent · <a href="https://paretotalent.com" target="_blank" rel="noopener">paretotalent.com</a></footer>
+</div>

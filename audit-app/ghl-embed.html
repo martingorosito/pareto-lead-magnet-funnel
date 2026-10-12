@@ -1,0 +1,499 @@
+<!-- Interactive Bottleneck Audit. Paste this whole block into a GoHighLevel "Custom HTML/JS" (Code) element. -->
+<style>/* Full-width fix: makes the audit fill the whole screen even inside a boxed GoHighLevel section. */ html,body{background:#070C10!important;overflow-x:hidden} #pba{width:100vw!important;max-width:100vw!important;position:relative;left:50%;margin-left:-50vw!important;margin-right:0!important}</style>
+<script>window.PBA_CONFIG={bookingUrl:"/book",pdfUrl:"" /* optional: link to the printable PDF */};</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<style>
+/* One question per screen. Next slides the current screen out and the next one in; Back reverses it. */
+#pba{
+  --ink:#070C10; --ink-2:#0E171C; --panel:#122027; --line:#1E2E36;
+  --fg:#F3F6F5; --muted:#9AA8B0; --accent:#10B981; --accent-2:#0B8A61; --accent-soft:rgba(16,185,129,.14);
+  --display:"Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+  --body:"DM Sans", "Segoe UI", system-ui, sans-serif;
+  color-scheme:dark;
+  background:var(--ink); color:var(--fg); font-family:var(--body); font-size:16px; line-height:1.55;
+  padding-block:32px 64px; padding-inline:16px; box-sizing:border-box; min-height:100vh;
+}
+#pba *,#pba *::before,#pba *::after{box-sizing:border-box}
+#pba .pba-wrap{max-width:720px; margin:0 auto}
+#pba h1,#pba h2,#pba h3{font-family:var(--display); margin:0; text-wrap:balance; letter-spacing:-.01em}
+#pba p{margin:0}
+#pba [hidden]{display:none!important}
+#pba .pba-eyebrow{font-family:var(--display); font-weight:700; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent)}
+#pba .pba-muted{color:var(--muted)}
+/* top bar + progress */
+#pba .pba-top-bar{display:grid; gap:10px; margin-bottom:20px}
+#pba .pba-top-row{display:flex; justify-content:space-between; align-items:center; gap:12px; font-size:13px; color:var(--muted)}
+#pba .pba-top-row b{font-family:var(--display); color:var(--fg); font-weight:700}
+#pba .pba-progress{height:4px; border-radius:2px; background:var(--line); overflow:hidden}
+#pba .pba-progress i{display:block; height:100%; width:0; background:var(--accent); border-radius:2px; transition:width .45s cubic-bezier(.2,.7,.2,1)}
+/* the card that holds one screen at a time */
+#pba .pba-card{background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:clamp(20px,4vw,36px); overflow:hidden}
+#pba .pba-screen{display:grid; gap:18px}
+#pba .pba-screen h2{font-size:clamp(22px,3.6vw,30px); line-height:1.15; font-weight:800}
+#pba .pba-screen h2:focus{outline:none}
+#pba .pba-lead{color:var(--muted); font-size:16px}
+/* intro */
+#pba .pba-intro h1{font-size:clamp(28px,5vw,44px); line-height:1.08; font-weight:800}
+#pba .pba-intro h1 span{color:var(--accent)}
+#pba .pba-steps3{list-style:none; margin:0; padding:0; display:grid; gap:10px}
+#pba .pba-steps3 li{display:grid; grid-template-columns:32px minmax(0,1fr); gap:12px; align-items:start; background:var(--ink-2); border-radius:12px; padding:12px 14px}
+#pba .pba-steps3 b{font-family:var(--display)}
+#pba .pba-n{font-family:var(--display); font-weight:800; color:var(--ink); background:var(--accent); width:28px; height:28px; border-radius:50%; display:grid; place-items:center; font-size:14px}
+/* warm-up signals */
+#pba .pba-signals{display:grid; gap:8px}
+#pba .pba-signal{display:grid; grid-template-columns:22px minmax(0,1fr); gap:6px 12px; align-items:center; padding:12px 14px; border:1px solid var(--line); border-radius:12px; background:var(--ink-2); cursor:pointer; transition:border-color .15s, background .15s}
+#pba .pba-signal:hover{border-color:var(--accent-2)}
+#pba .pba-signal input{position:absolute; opacity:0; pointer-events:none}
+#pba .pba-tick{width:22px; height:22px; border-radius:6px; border:1.5px solid var(--muted); display:grid; place-items:center; color:transparent; font-weight:800; font-size:14px; transition:background .15s, border-color .15s, transform .15s}
+#pba .pba-signal.is-on{border-color:var(--accent); background:var(--accent-soft)}
+#pba .pba-signal.is-on .pba-tick{background:var(--accent); border-color:var(--accent); color:var(--ink); transform:scale(1.08)}
+#pba .pba-signal:focus-within{outline:2px solid var(--accent); outline-offset:2px}
+#pba .pba-stat{grid-column:2; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:10px; align-items:center; max-height:0; opacity:0; overflow:hidden; transition:max-height .4s ease, opacity .4s ease}
+#pba .pba-signals.is-shown .pba-stat{max-height:32px; opacity:1}
+#pba .pba-bar{height:6px; border-radius:3px; background:var(--line); overflow:hidden}
+#pba .pba-bar i{display:block; height:100%; width:0; background:var(--accent); border-radius:3px; transition:width .9s cubic-bezier(.2,.7,.2,1)}
+#pba .pba-pct{font-variant-numeric:tabular-nums; font-size:13px; color:var(--muted); white-space:nowrap}
+#pba .pba-pct b{color:var(--fg); font-family:var(--display)}
+#pba .pba-callout{background:var(--accent-soft); border:1px solid var(--accent-2); border-radius:12px; padding:12px 14px; font-size:15px}
+/* system screens */
+#pba .pba-yours{background:var(--ink-2); border-left:3px solid var(--accent); border-radius:0 10px 10px 0; padding:10px 14px; color:var(--muted); font-size:15px}
+#pba .pba-yours b{color:var(--fg)}
+#pba .pba-q{font-family:var(--display); font-weight:700; font-size:15px}
+#pba .pba-opts{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+@media (max-width:520px){ #pba .pba-opts{grid-template-columns:1fr} }
+#pba .pba-opt{position:relative; cursor:pointer}
+#pba .pba-opt input{position:absolute; opacity:0; pointer-events:none}
+#pba .pba-opt span{display:grid; gap:2px; height:100%; padding:12px 14px; border:1px solid var(--line); border-radius:12px; background:var(--ink-2); transition:border-color .15s, background .15s, transform .15s}
+#pba .pba-opt span b{font-family:var(--display); font-size:15px}
+#pba .pba-opt span small{color:var(--muted); font-size:13px}
+#pba .pba-opt:hover span{border-color:var(--accent-2)}
+#pba .pba-opt input:checked + span{border-color:var(--accent); background:var(--accent-soft)}
+#pba .pba-opt input:checked + span b{color:var(--accent)}
+#pba .pba-opt input:focus-visible + span{outline:2px solid var(--fg); outline-offset:2px}
+#pba .pba-hrs-row{display:flex; flex-wrap:wrap; gap:12px 16px; align-items:center}
+#pba .pba-hrs{display:inline-flex; align-items:center; border:1px solid var(--line); border-radius:12px; background:var(--ink)}
+#pba .pba-hrs button{all:unset; cursor:pointer; width:44px; height:48px; display:grid; place-items:center; color:var(--fg); font-size:22px}
+#pba .pba-hrs button:focus-visible{outline:2px solid var(--accent)}
+#pba .pba-hrs input{all:unset; width:44px; text-align:center; font-variant-numeric:tabular-nums; font-weight:800; font-family:var(--display); font-size:22px}
+#pba .pba-hrs small{color:var(--muted); font-size:13px; padding-right:12px}
+#pba .pba-pill{font-size:13px; border-radius:999px; padding:4px 10px; background:var(--ink-2); color:var(--muted)}
+#pba .pba-pill.is-on{background:var(--accent-soft); color:var(--accent)}
+#pba .pba-need{color:var(--accent); font-size:14px}
+/* revenue */
+#pba .pba-money{display:flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:12px; background:var(--ink); padding:0 14px; max-width:320px}
+#pba .pba-money span{font-family:var(--display); font-weight:700; font-size:20px; color:var(--muted)}
+#pba .pba-money input{all:unset; flex:1; min-width:0; height:52px; font-variant-numeric:tabular-nums; font-weight:700; font-family:var(--display); font-size:20px}
+#pba .pba-money:focus-within{border-color:var(--accent)}
+#pba .pba-chips{display:flex; flex-wrap:wrap; gap:8px}
+#pba .pba-chip{all:unset; cursor:pointer; font-size:14px; font-weight:500; padding:8px 14px; border-radius:999px; border:1px solid var(--line); background:var(--ink-2)}
+#pba .pba-chip:hover{border-color:var(--accent-2)}
+#pba .pba-chip.is-on{border-color:var(--accent); background:var(--accent-soft); color:var(--accent)}
+#pba .pba-chip:focus-visible{outline:2px solid var(--accent)}
+/* results */
+#pba .pba-kpis{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+#pba .pba-kpi{background:var(--ink-2); border-radius:14px; padding:16px}
+#pba .pba-k-label{font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; font-family:var(--display); font-weight:700}
+#pba .pba-k-val{font-family:var(--display); font-weight:800; font-size:clamp(36px,7vw,52px); line-height:1.05; font-variant-numeric:tabular-nums}
+#pba .pba-k-val small{font-size:15px; color:var(--muted); font-weight:600}
+#pba .pba-kpi.is-accent .pba-k-val{color:var(--accent)}
+#pba .pba-block{display:grid; gap:8px; border-top:1px solid var(--line); padding-top:18px}
+#pba .pba-block h3{font-size:16px; font-weight:700}
+#pba .pba-band-name{font-family:var(--display); font-weight:800; font-size:22px}
+#pba .pba-scale{display:grid; grid-template-columns:repeat(4,1fr); gap:4px}
+#pba .pba-scale i{height:6px; border-radius:3px; background:var(--line); transition:background .3s}
+#pba .pba-scale i.is-on{background:var(--accent)}
+#pba .pba-week-h{display:flex; justify-content:space-between; gap:12px; font-size:13px; color:var(--muted)}
+#pba .pba-days{display:grid; grid-template-columns:repeat(5,1fr); gap:6px}
+#pba .pba-day{display:grid; gap:3px}
+#pba .pba-day span{font-size:11px; color:var(--muted); text-align:center; font-family:var(--display); font-weight:700}
+#pba .pba-cell{height:10px; border-radius:2px; background:var(--line); transition:background .25s}
+#pba .pba-cell.is-on{background:var(--accent)}
+#pba .pba-cost-out b{color:var(--accent); font-family:var(--display); font-size:24px}
+#pba .pba-toplist{margin:0; padding-left:22px; display:grid; gap:4px}
+#pba .pba-toplist li span{color:var(--muted); font-variant-numeric:tabular-nums}
+#pba .pba-plan{list-style:none; margin:0; padding:0; display:grid; gap:8px}
+#pba .pba-plan li{display:grid; grid-template-columns:64px minmax(0,1fr); gap:8px; font-size:15px}
+#pba .pba-plan li b{font-family:var(--display); color:var(--accent); font-size:12px; letter-spacing:.06em; text-transform:uppercase; padding-top:3px}
+#pba .pba-cta{display:grid; gap:10px; background:var(--accent); color:var(--ink); border-radius:14px; padding:20px}
+#pba .pba-cta.is-soft{background:var(--ink-2); color:var(--fg)}
+#pba .pba-cta h3{font-size:19px; font-weight:800}
+#pba .pba-cta p{font-size:14px}
+#pba .pba-guar{font-size:13px; opacity:.85}
+#pba .pba-reveal{opacity:0; transform:translateY(12px)}
+#pba .pba-reveal.is-in{opacity:1; transform:none; transition:opacity .5s ease, transform .5s cubic-bezier(.2,.7,.2,1)}
+/* buttons + nav */
+#pba .pba-btn{display:inline-flex; justify-content:center; align-items:center; gap:8px; background:var(--accent); color:var(--ink); text-decoration:none; font-family:var(--display); font-weight:700; padding:13px 22px; border-radius:999px; border:0; cursor:pointer; font-size:15px; transition:transform .15s, filter .15s}
+#pba .pba-btn:hover{filter:brightness(1.08)}
+#pba .pba-btn:active{transform:scale(.98)}
+#pba .pba-btn:focus-visible{outline:2px solid var(--fg); outline-offset:2px}
+#pba .pba-cta:not(.is-soft) .pba-btn{background:var(--ink); color:var(--fg)}
+#pba .pba-ghost{all:unset; cursor:pointer; font-family:var(--display); font-weight:700; font-size:15px; color:var(--muted); padding:12px 6px}
+#pba .pba-ghost:hover{color:var(--fg)}
+#pba .pba-ghost:focus-visible{outline:2px solid var(--accent); border-radius:6px}
+#pba .pba-link{all:unset; cursor:pointer; color:var(--accent); font-weight:600; font-size:14px; text-decoration:underline; text-underline-offset:3px}
+#pba .pba-nav{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:24px; padding-top:18px; border-top:1px solid var(--line)}
+#pba .pba-row{display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center}
+#pba .pba-toast{font-size:13px; color:var(--accent)}
+#pba .pba-shake{animation:pba-shake .35s}
+@keyframes pba-shake{25%{transform:translateX(-6px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
+#pba .pba-foot{margin-top:28px; color:var(--muted); font-size:13px; display:flex; flex-wrap:wrap; gap:8px 20px}
+#pba .pba-foot a{color:var(--muted)}
+@media (prefers-reduced-motion:reduce){ #pba *{transition:none!important; animation:none!important} #pba .pba-reveal{opacity:1; transform:none} }
+</style>
+
+<div id="pba">
+<div class="pba-wrap">
+  <div class="pba-top-bar" id="pba-topbar" hidden>
+    <div class="pba-top-row"><b>Founder's Bottleneck Audit</b><span id="pba-step-label">Step 1 of 10</span></div>
+    <div class="pba-progress" aria-hidden="true"><i id="pba-progress"></i></div>
+  </div>
+
+  <div class="pba-card">
+    <div id="pba-screens">
+      <!-- 0 · intro -->
+      <section class="pba-screen pba-intro" data-screen="intro">
+        <div class="pba-eyebrow">Pareto Talent · Free founder audit · Under 10 minutes</div>
+        <h1 tabindex="-1">The Founder's Bottleneck Audit: <span>Find the 10 Hours a Week You Should Never Touch Again</span></h1>
+        <p class="pba-lead">The average founder runs about 14 systems from memory. This audit zooms in on the 8 where the hours hide, one question at a time. Nothing you enter is sent anywhere.</p>
+        <ol class="pba-steps3">
+          <li><span class="pba-n">1</span><span><b>Warm up.</b> <span class="pba-muted">Tick the signals that are true for you this month.</span></span></li>
+          <li><span class="pba-n">2</span><span><b>Score 8 systems.</b> <span class="pba-muted">Who runs it, and how many hours it takes you.</span></span></li>
+          <li><span class="pba-n">3</span><span><b>Get your plan.</b> <span class="pba-muted">Your score, your Hand-off Hours, the cost and what to hand off first.</span></span></li>
+        </ol>
+        <div class="pba-row">
+          <button class="pba-btn" type="button" id="pba-start">Start my audit →</button>
+          <button class="pba-link" type="button" id="pba-example" hidden>Or see an example result</button>
+        </div>
+      </section>
+
+      <!-- 1 · warm-up -->
+      <section class="pba-screen" data-screen="warm" hidden>
+        <div class="pba-eyebrow">Warm up</div>
+        <h2 tabindex="-1">Which of these are true for you this month?</h2>
+        <p class="pba-lead" id="pba-warm-lead">Tick every one that applies. There are no wrong answers.</p>
+        <div class="pba-signals" id="pba-signals"></div>
+        <p class="pba-callout" id="pba-warm-out" hidden></p>
+      </section>
+
+      <!-- 2..9 · systems are inserted here -->
+
+      <!-- 10 · revenue -->
+      <section class="pba-screen" data-screen="rev" hidden>
+        <div class="pba-eyebrow">Last question</div>
+        <h2 tabindex="-1">Roughly what's your annual revenue?</h2>
+        <p class="pba-lead">Your time is worth at least your revenue divided by 2,000 working hours. We use it to show what your Hand-off Hours cost you a year.</p>
+        <div class="pba-money"><span>$</span><input id="pba-rev" inputmode="numeric" autocomplete="off" placeholder="1,000,000" aria-label="Annual revenue in US dollars"></div>
+        <div class="pba-chips" id="pba-chips"></div>
+        <p class="pba-muted" style="font-size:14px">Rather not say? Leave it empty and skip ahead.</p>
+      </section>
+
+      <!-- 11 · results -->
+      <section class="pba-screen" data-screen="results" hidden id="pba-results" aria-live="polite">
+        <div class="pba-eyebrow">Your results</div>
+        <h2 tabindex="-1" id="pba-res-h">Here's where your week goes</h2>
+        <div class="pba-kpis pba-reveal">
+          <div class="pba-kpi"><div class="pba-k-label">Bottleneck Score</div><div class="pba-k-val"><span id="pba-score">0</span><small> / 24</small></div></div>
+          <div class="pba-kpi is-accent"><div class="pba-k-label">Hand-off Hours</div><div class="pba-k-val"><span id="pba-hours">0</span><small> hrs/wk</small></div></div>
+        </div>
+        <div class="pba-block pba-reveal">
+          <div class="pba-scale" id="pba-scale"><i></i><i></i><i></i><i></i></div>
+          <div class="pba-band-name" id="pba-band-name"></div>
+          <p class="pba-muted" id="pba-band-text"></p>
+        </div>
+        <div class="pba-block pba-reveal">
+          <div class="pba-week-h"><span>Your work week, in hours</span><span id="pba-week-note"></span></div>
+          <div class="pba-days" id="pba-days"></div>
+          <p class="pba-muted" id="pba-hours-text" style="font-size:15px"></p>
+        </div>
+        <div class="pba-block pba-reveal">
+          <h3>What those hours cost you</h3>
+          <p class="pba-cost-out" id="pba-cost-out"></p>
+        </div>
+        <div class="pba-block pba-reveal">
+          <h3>Hand off first</h3>
+          <ol class="pba-toplist" id="pba-top"></ol>
+          <p class="pba-muted" id="pba-top-empty">Nothing to hand off yet: none of your systems are "Mostly me" or "Only me" with hours on them.</p>
+        </div>
+        <div class="pba-block pba-reveal">
+          <h3>Your first 30 days</h3>
+          <ul class="pba-plan" id="pba-plan"></ul>
+        </div>
+        <div class="pba-cta is-soft pba-reveal" id="pba-cta">
+          <h3 id="pba-cta-h">Rather not do it alone?</h3>
+          <p id="pba-cta-p"></p>
+          <a class="pba-btn" id="pba-book" href="#">Book your Right Hand Fit Call →</a>
+          <p class="pba-guar">Freedom 40: 40+ hours back in 30 days or next month free · Matching: no payment until you're excited about your match · Lifetime Replacement</p>
+        </div>
+        <div class="pba-row pba-reveal">
+          <button class="pba-link" type="button" id="pba-copy">Copy my results</button>
+          <a class="pba-link" id="pba-pdf" href="#" target="_blank" rel="noopener">Printable PDF version</a>
+          <button class="pba-link" type="button" id="pba-restart">Start over</button>
+          <span class="pba-toast" id="pba-toast" aria-live="polite"></span>
+        </div>
+      </section>
+    </div>
+
+    <div class="pba-nav" id="pba-nav" hidden>
+      <button class="pba-ghost" type="button" id="pba-back">← Back</button>
+      <span class="pba-need" id="pba-need" aria-live="polite"></span>
+      <button class="pba-btn" type="button" id="pba-next">Next →</button>
+    </div>
+  </div>
+
+  <footer class="pba-foot"><span>© Pareto Talent</span><a href="https://paretotalent.com" target="_blank" rel="noopener">paretotalent.com</a><span>Numbers from paretotalent.com and Pareto's analysis of 1,500+ founder calls.</span></footer>
+</div>
+</div>
+
+<script>
+(function(){
+  var cfg = window.PBA_CONFIG || {};
+  var BOOKING_URL = cfg.bookingUrl || "/book";
+  var PDF_URL = cfg.pdfUrl || "";
+  var DEMO = !!cfg.demo;
+  /* Founders the qualifying form screened out arrive with ?fit=no (thank-you page button, nurture emails): no booking button for them. */
+  var NOT_FIT = !!cfg.notFit || (function(){ var q = ""; try{ q = location.search; }catch(e){} try{ q = q || window.top.location.search; }catch(e){} return /[?&]fit=no(&|$)/i.test(q); })();
+  var KEY = "pba-audit-v2";
+
+  var SIGNALS = [["I'm drowning in admin: inbox, scheduling, invoices, follow-ups.",80],["I have no time left for strategy, family or my own health.",70],["I've been burned by a VA or assistant before.",60],["Most of the business runs from my memory, not from a system.",50],["Things fall through the cracks every week.",40],["I wear too many hats to do any of them well.",30]];
+  var SYSTEMS = [["Inbox and messages","Email, Slack and WhatsApp all route through you, and nothing gets answered unless you answer it."],["Calendar, meetings and follow-up","You schedule your own meetings, walk in cold and write your own recaps, if at all."],["Travel and personal admin","You book your own flights, renew your own subscriptions and chase your own appointments."],["Sales follow-ups, proposals and CRM","Leads go quiet because you didn't follow up, and you write proposals at night."],["Client onboarding and updates","New clients wait on you for kickoff, and existing ones email you for status."],["Invoicing, bills and expenses","You send invoices, chase late payments and file receipts yourself."],["Team, hiring and project follow-through","You assign the work, chase deadlines and schedule every interview. The real project list lives in your head."],["SOPs, tools and content","Nobody else knows how things are done, new tools get set up by you, and posts go out only when you find time."]];
+  var LEVELS = [["Not me","Someone else owns it end to end"],["I check it","Someone does it, you approve"],["Mostly me","You do most of it, with a little help"],["Only me","If you stop, it stops"]];
+  var BANDS = [[0,6,"The Delegator","Most systems already run without you. Hand off the one or two still leaking hours."],[7,12,"Stretched","The obvious work is gone, but you're still the glue: follow-ups, coordination, admin."],[13,18,"The Bottleneck","Work waits for you every day. You built a company, and now you're working in it as a job."],[19,24,"The Business Is You","Two weeks off and most of the company stops. Most urgent, and most fixable."]];
+  var CHIPS = [["$250K",250000],["$500K",500000],["$1M",1000000],["$2M",2000000],["$5M+",5000000]];
+  var EXAMPLE = {sig:[true,true,true,false,true,false], shown:true, a:[3,3,2,2,1,2,3,1], h:[8,4,2,3,2,2,5,2], rev:"1000000", step:11};
+
+  var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var st = blank(), cur = 0, busy = false, screens;
+  function blank(){ return {sig:[false,false,false,false,false,false], shown:false, a:[null,null,null,null,null,null,null,null], h:[0,0,0,0,0,0,0,0], rev:"", step:0}; }
+  function $(id){ return document.getElementById(id); }
+  function fmt(n){ return Math.round(n).toLocaleString("en-US"); }
+  function save(){ if(DEMO) return; st.step = cur; try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
+  function load(){ try{ var s = JSON.parse(localStorage.getItem(KEY)); if(s && s.a && s.a.length===8 && s.sig) st = s; }catch(e){} }
+
+  /* ---------- build ---------- */
+  function buildSignals(){
+    var box = $("pba-signals"); box.innerHTML = "";
+    SIGNALS.forEach(function(s,i){
+      var l = document.createElement("label"); l.className = "pba-signal"; l.setAttribute("for","pba-sig-"+i);
+      l.innerHTML = '<input type="checkbox" id="pba-sig-'+i+'"><span class="pba-tick" aria-hidden="true">✓</span><span>'+s[0]+'</span>'+
+        '<span class="pba-stat"><span class="pba-bar" aria-hidden="true"><i></i></span><span class="pba-pct"><b data-pct="'+s[1]+'">0%</b> of founders said this</span></span>';
+      box.appendChild(l);
+      var inp = l.querySelector("input");
+      inp.addEventListener("change", function(){ st.sig[i] = inp.checked; paint(); });
+    });
+  }
+  function buildSystems(){
+    var anchor = document.querySelector('[data-screen="rev"]');
+    SYSTEMS.forEach(function(s,i){
+      var sec = document.createElement("section"); sec.className = "pba-screen"; sec.dataset.screen = "sys"; sec.dataset.i = i; sec.hidden = true;
+      var opts = LEVELS.map(function(t,v){ return '<label class="pba-opt"><input type="radio" name="pba-a-'+i+'" id="pba-a-'+i+'-'+v+'" value="'+v+'"><span><b>'+t[0]+'</b><small>'+t[1]+'</small></span></label>'; }).join("");
+      sec.innerHTML = '<div class="pba-eyebrow">System '+(i+1)+' of 8</div><h2 tabindex="-1">'+s[0]+'</h2>'+
+        '<p class="pba-yours"><b>Still yours if:</b> '+s[1]+'</p>'+
+        '<p class="pba-q">Who runs it today?</p><div class="pba-opts" role="radiogroup" aria-label="Who runs '+s[0]+'" id="pba-opts-'+i+'">'+opts+'</div>'+
+        '<p class="pba-q">Hours a week it takes <u>you</u></p>'+
+        '<div class="pba-hrs-row"><div class="pba-hrs"><button type="button" aria-label="Fewer hours" data-d="-1">−</button><input id="pba-h-'+i+'" inputmode="numeric" aria-label="Hours a week on '+s[0]+'" value="0"><small>hrs</small><button type="button" aria-label="More hours" data-d="1">+</button></div>'+
+        '<span class="pba-pill" id="pba-pill-'+i+'">Pick who runs it first</span></div>';
+      anchor.parentNode.insertBefore(sec, anchor);
+      sec.querySelectorAll('input[type=radio]').forEach(function(r){ r.addEventListener("change", function(){ st.a[i] = +r.value; $("pba-need").textContent = ""; paint(); }); });
+      var hin = sec.querySelector("#pba-h-"+i);
+      sec.querySelectorAll(".pba-hrs button").forEach(function(b){ b.addEventListener("click", function(){ st.h[i] = Math.max(0, Math.min(60, st.h[i] + +b.dataset.d)); paint(); }); });
+      hin.addEventListener("input", function(){ var v = parseInt(hin.value.replace(/\D/g,""),10); st.h[i] = isNaN(v)?0:Math.min(60,v); paint(true); });
+      hin.addEventListener("focus", function(){ hin.select(); });
+    });
+    var chips = $("pba-chips");
+    CHIPS.forEach(function(c){ var b = document.createElement("button"); b.type = "button"; b.className = "pba-chip"; b.textContent = c[0]; b.dataset.v = c[1];
+      b.addEventListener("click", function(){ st.rev = String(c[1]); paint(); }); chips.appendChild(b); });
+    var days = $("pba-days");
+    ["Mon","Tue","Wed","Thu","Fri"].forEach(function(d,di){
+      var col = document.createElement("div"); col.className = "pba-day";
+      var cells = ""; for(var k=0;k<10;k++) cells += '<div class="pba-cell" data-n="'+(di*10+k)+'"></div>';
+      col.innerHTML = cells + '<span>'+d+'</span>'; days.appendChild(col);
+    });
+    screens = Array.prototype.slice.call(document.querySelectorAll("#pba-screens > .pba-screen"));
+  }
+
+  /* ---------- maths ---------- */
+  function calc(){
+    var score = 0, hours = 0, answered = 0, list = [];
+    st.a.forEach(function(a,i){ if(a!==null){ answered++; score += a; } if(a>=2){ hours += st.h[i]; if(st.h[i]>0) list.push([SYSTEMS[i][0], st.h[i]]); } });
+    list.sort(function(x,y){ return y[1]-x[1]; });
+    var rev = parseInt(String(st.rev).replace(/\D/g,""),10); if(isNaN(rev)) rev = 0;
+    return {score:score, hours:hours, answered:answered, top:list.slice(0,3), rev:rev, sig:st.sig.filter(Boolean).length};
+  }
+  function hoursText(h){
+    if(h>=20) return "Half a work week, every week, on work that doesn't need you. A full-time Right Hand pays for itself in month one.";
+    if(h>=10) return "You found the 10 hours. That's 40+ hours a month, the number Pareto's Freedom 40 Guarantee gives back in the first 30 days.";
+    if(h>=5) return "A real day a week of work someone else should own. Worth handing off this quarter.";
+    if(h>0) return "You're close. Tighten one or two systems and you're done.";
+    return "No Hand-off Hours yet. Either you've already delegated well, or it's worth a second, more honest pass.";
+  }
+
+  /* ---------- paint the current answers into the inputs ---------- */
+  function paint(fromTyping){
+    st.sig.forEach(function(on,i){ var inp = $("pba-sig-"+i); inp.checked = on; inp.parentNode.classList.toggle("is-on", on); });
+    if(st.shown) warmOut();
+    st.a.forEach(function(a,i){
+      LEVELS.forEach(function(_,v){ $("pba-a-"+i+"-"+v).checked = (a===v); });
+      var hin = $("pba-h-"+i); if(!fromTyping || document.activeElement!==hin) hin.value = st.h[i];
+      var pill = $("pba-pill-"+i);
+      pill.classList.toggle("is-on", a>=2);
+      pill.textContent = a===null ? "Pick who runs it first" : (a>=2 ? "Counts toward your Hand-off Hours" : "Someone else has this one");
+    });
+    var revIn = $("pba-rev"), rv = calc().rev;
+    if(document.activeElement!==revIn) revIn.value = rv ? fmt(rv) : "";
+    $("pba-chips").querySelectorAll(".pba-chip").forEach(function(b){ b.classList.toggle("is-on", +b.dataset.v===rv); });
+    save();
+  }
+
+  /* ---------- warm-up reveal ---------- */
+  function warmOut(){
+    var n = st.sig.filter(Boolean).length, el = $("pba-warm-out");
+    el.hidden = false;
+    el.textContent = n>=3 ? "You ticked "+n+" of 6. You're not alone, and the next step shows exactly where those hours hide."
+      : n ? "You ticked "+n+" of 6. Let's see where your hours actually go." : "None of these? Great. Let's check the 8 systems to be sure.";
+  }
+  function reveal(animate){
+    var box = $("pba-signals");
+    box.classList.add("is-shown");
+    $("pba-warm-lead").textContent = "Here's how many of the 1,500+ founders Pareto spoke to said the same.";
+    box.querySelectorAll(".pba-signal").forEach(function(row,i){
+      var bar = row.querySelector(".pba-bar i"), pct = row.querySelector(".pba-pct b"), to = +pct.dataset.pct;
+      if(!animate || REDUCED){ bar.style.transition = "none"; bar.style.width = to+"%"; pct.textContent = to+"%"; return; }
+      bar.style.transition = ""; bar.style.width = "0";
+      setTimeout(function(){ bar.style.width = to+"%"; countTo(pct, to, 900, "", "%"); }, 120 + i*110);
+    });
+    warmOut();
+  }
+  function countTo(el, to, dur, pre, post){
+    pre = pre||""; post = post||"";
+    if(REDUCED || !window.requestAnimationFrame){ el.textContent = pre+fmt(to)+post; return; }
+    var t0 = null;
+    function step(t){ if(!t0) t0 = t; var p = Math.min(1,(t-t0)/dur), e = 1-Math.pow(1-p,3); el.textContent = pre+fmt(to*e)+post; if(p<1) requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+  }
+
+  /* ---------- results ---------- */
+  function showResults(animate){
+    var r = calc();
+    var bi = 0; BANDS.forEach(function(b,i){ if(r.score>=b[0] && r.score<=b[1]) bi = i; });
+    $("pba-band-name").textContent = ["You're The Delegator","You're Stretched","You're The Bottleneck","The Business Is You"][bi];
+    $("pba-band-text").textContent = BANDS[bi][3];
+    $("pba-week-note").textContent = Math.min(r.hours,50)+" of 50 hours";
+    $("pba-hours-text").textContent = hoursText(r.hours);
+    if(r.rev){
+      var hourly = r.rev/2000, yearly = hourly*r.hours*50;
+      $("pba-cost-out").innerHTML = "Your time is worth about $"+fmt(hourly)+" an hour, so your Hand-off Hours cost you <b id=\"pba-cost-n\">$"+fmt(yearly)+"</b> a year.<br><span class=\"pba-muted\" style=\"font-size:14px\">For comparison, a full-time Right Hand is $3,600 a month ($43,200 a year) plus a one-time $3,000 placement fee.</span>";
+    } else $("pba-cost-out").innerHTML = "Your time is worth at least your revenue ÷ 2,000 hours. <button class=\"pba-link\" type=\"button\" id=\"pba-add-rev\">Add your revenue</button> to see the yearly cost.";
+    var addRev = $("pba-add-rev"); if(addRev) addRev.addEventListener("click", function(){ go(screens.length-2); });
+    var ol = $("pba-top"); ol.innerHTML = "";
+    r.top.forEach(function(t){ var li = document.createElement("li"); li.innerHTML = t[0]+' <span>· '+t[1]+' hrs/wk</span>'; ol.appendChild(li); });
+    $("pba-top-empty").hidden = r.top.length>0; ol.hidden = !r.top.length;
+    var n1 = r.top[0] ? r.top[0][0] : "your #1 system", n2 = r.top[1] ? r.top[1][0] : "#2", n3 = r.top[2] ? r.top[2][0] : "#3";
+    $("pba-plan").innerHTML = [["Week 1","Give access to "+n1+" and record one 5-minute video of how you like it done."],["Week 2","They run it, you review. Daily end-of-day report: Done, In progress, Blockers."],["Week 3","They own it. You only see what needs your judgment. Record "+n2+"."],["Week 4",(r.top.length>2 ? "Hand off "+n2+" and "+n3 : r.top.length>1 ? "Hand off "+n2+" fully" : "Hand off the next system on your list")+", then re-score this audit to see the hours you got back."]].map(function(w){ return "<li><b>"+w[0]+"</b><span>"+w[1]+"</span></li>"; }).join("");
+    var high = r.score>=13 || r.hours>=10, cta = $("pba-cta");
+    if(NOT_FIT){ cta.classList.add("is-soft"); $("pba-cta-h").textContent = "What happens next"; $("pba-cta-p").textContent = "Over the next few days we'll email you practical ideas for handing off your top three systems. Run this audit again every quarter: the day your Hand-off Hours pass 10 is the day to talk. Reply to any of our emails when that happens."; }
+    else if(high && r.rev>=500000){ cta.classList.remove("is-soft"); $("pba-cta-h").textContent = "You're a fit for a free Right Hand Fit Call"; $("pba-cta-p").textContent = "30 minutes with Pareto. Bring these results, and leave with your first 30 days of delegation mapped, whether or not you hire."; }
+    else if(high && !r.rev){ cta.classList.add("is-soft"); $("pba-cta-h").textContent = "Doing $500K a year or more?"; $("pba-cta-p").textContent = "With results like these, a free Right Hand Fit Call is your next step. Bring this list and leave with your first 30 days mapped, whether or not you hire."; }
+    else { cta.classList.add("is-soft"); $("pba-cta-h").textContent = "Rather not do it alone?"; $("pba-cta-p").textContent = "A full-time, AI-trained Right Hand from Pareto takes this list off your plate. Matched in 24 hours, 1 in 1,000 applicants accepted, 93% of placements still together at 12 months."; }
+
+    var parts = $("pba-results").querySelectorAll(".pba-reveal"), cells = $("pba-days").querySelectorAll(".pba-cell"), bars = $("pba-scale").querySelectorAll("i");
+    if(!animate || REDUCED){
+      parts.forEach(function(p){ p.classList.add("is-in"); });
+      $("pba-score").textContent = r.score; $("pba-hours").textContent = r.hours;
+      cells.forEach(function(c){ c.style.transitionDelay = "0s"; c.classList.toggle("is-on", +c.dataset.n < r.hours); });
+      bars.forEach(function(el,i){ el.classList.toggle("is-on", i<=bi); });
+      return;
+    }
+    parts.forEach(function(p){ p.classList.remove("is-in"); });
+    cells.forEach(function(c){ c.classList.remove("is-on"); });
+    bars.forEach(function(el){ el.classList.remove("is-on"); });
+    $("pba-score").textContent = "0"; $("pba-hours").textContent = "0";
+    parts.forEach(function(p,k){ setTimeout(function(){ p.classList.add("is-in"); }, 150 + k*140); });
+    setTimeout(function(){ countTo($("pba-score"), r.score, 1000); countTo($("pba-hours"), r.hours, 1000); }, 250);
+    setTimeout(function(){ bars.forEach(function(el,i){ setTimeout(function(){ el.classList.toggle("is-on", i<=bi); }, i*180); }); }, 500);
+    setTimeout(function(){ cells.forEach(function(c){ var n = +c.dataset.n; c.style.transitionDelay = (n*0.03)+"s"; c.classList.toggle("is-on", n < r.hours); }); }, 650);
+    var cn = $("pba-cost-n"); if(cn) setTimeout(function(){ countTo(cn, r.rev/2000*r.hours*50, 1200, "$"); }, 800);
+  }
+
+  /* ---------- navigation ---------- */
+  function chrome(){
+    var last = screens.length-1, kind = screens[cur].dataset.screen;
+    $("pba-topbar").hidden = cur===0; $("pba-nav").hidden = cur===0;
+    $("pba-step-label").textContent = cur===last ? "Your results" : "Step "+cur+" of "+(last-1);
+    $("pba-progress").style.width = (cur/last*100)+"%";
+    var next = $("pba-next");
+    next.hidden = cur===last;
+    next.textContent = kind==="warm" && !st.shown ? "See how you compare →" : (kind==="rev" ? "See my results →" : "Next →");
+    $("pba-need").textContent = "";
+  }
+  function enter(animate){
+    var kind = screens[cur].dataset.screen;
+    if(kind==="results") showResults(animate);
+    if(kind==="warm" && st.shown) reveal(false);
+    chrome(); save();
+  }
+  function go(to){
+    if(busy || to===cur || to<0 || to>=screens.length) return;
+    var dir = to>cur ? 1 : -1, out = screens[cur], inc = screens[to], top = document.getElementById("pba");
+    cur = to;
+    var land = function(){
+      out.hidden = true; inc.hidden = false; enter(true);
+      var h = inc.querySelector("h1,h2"); if(h) try{ h.focus({preventScroll:true}); }catch(e){}
+      var rect = top.getBoundingClientRect(); if(rect.top < 0) top.scrollIntoView({behavior: REDUCED ? "auto" : "smooth", block:"start"});
+      if(!REDUCED && inc.animate){
+        busy = true;
+        var a = inc.animate([{transform:"translateX("+(dir*56)+"px)",opacity:0},{transform:"none",opacity:1}],{duration:320,easing:"cubic-bezier(.2,.7,.2,1)"});
+        a.onfinish = a.oncancel = function(){ busy = false; };
+      }
+    };
+    if(REDUCED || !out.animate){ land(); return; }
+    busy = true;
+    var a = out.animate([{transform:"none",opacity:1},{transform:"translateX("+(-dir*56)+"px)",opacity:0}],{duration:200,easing:"ease-in"});
+    a.onfinish = a.oncancel = function(){ busy = false; land(); };
+  }
+  function nudge(msg, el){
+    $("pba-need").textContent = msg;
+    if(el && !REDUCED){ el.classList.remove("pba-shake"); void el.offsetWidth; el.classList.add("pba-shake"); }
+  }
+  $("pba-next").addEventListener("click", function(){
+    var sc = screens[cur], kind = sc.dataset.screen;
+    if(kind==="warm" && !st.shown){ st.shown = true; reveal(true); chrome(); save(); return; }
+    if(kind==="sys" && st.a[+sc.dataset.i]===null){ nudge("Pick who runs it to continue.", $("pba-opts-"+sc.dataset.i)); return; }
+    go(cur+1);
+  });
+  $("pba-back").addEventListener("click", function(){ go(cur-1); });
+  $("pba-start").addEventListener("click", function(){ go(1); });
+
+  /* ---------- results actions ---------- */
+  function summary(){
+    var r = calc(), lines = ["My Founder's Bottleneck Audit results","Bottleneck Score: "+r.score+" / 24","Hand-off Hours: "+r.hours+" hrs a week"];
+    if(r.rev) lines.push("Yearly cost of those hours: $"+fmt(r.rev/2000*r.hours*50));
+    if(r.top.length){ lines.push("Hand off first:"); r.top.forEach(function(t,i){ lines.push((i+1)+". "+t[0]+" ("+t[1]+" hrs/wk)"); }); }
+    return lines.join("\n");
+  }
+  $("pba-rev").addEventListener("input", function(e){ st.rev = e.target.value.replace(/\D/g,""); paint(true); });
+  $("pba-rev").addEventListener("blur", function(){ paint(); });
+  $("pba-rev").addEventListener("keydown", function(e){ if(e.key==="Enter") $("pba-next").click(); });
+  $("pba-copy").addEventListener("click", function(){
+    var text = summary(), t = $("pba-toast");
+    try{ navigator.clipboard.writeText(text).then(function(){ t.textContent = "Copied. Paste it anywhere to keep it."; }, function(){ t.textContent = text; }); }
+    catch(e){ t.textContent = text; }
+  });
+  $("pba-restart").addEventListener("click", function(){
+    st = blank(); $("pba-signals").classList.remove("is-shown"); $("pba-warm-out").hidden = true;
+    $("pba-warm-lead").textContent = "Tick every one that applies. There are no wrong answers.";
+    $("pba-toast").textContent = ""; paint(); go(0);
+  });
+  $("pba-example").addEventListener("click", function(){ st = JSON.parse(JSON.stringify(EXAMPLE)); paint(); go(screens.length-1); });
+  $("pba-book").href = BOOKING_URL;
+  if(NOT_FIT){ $("pba-book").style.display = "none"; $("pba-cta").querySelector(".pba-guar").style.display = "none"; }
+  if(PDF_URL) $("pba-pdf").href = PDF_URL; else $("pba-pdf").hidden = true;
+
+  /* ---------- start ---------- */
+  buildSignals(); buildSystems();
+  if(DEMO) $("pba-example").hidden = false; else load();
+  cur = Math.max(0, Math.min(screens.length-1, st.step||0));
+  screens.forEach(function(s,i){ s.hidden = i!==cur; });
+  paint(); enter(false);
+})();
+</script>
